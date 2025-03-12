@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نمودار تکنیکال ارز دیجیتال</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        #chart-container {
+            width: 100%;
+            height: 500px;
+            background-color: #2a2a2a;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .controls {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .controls button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        .controls select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            background-color: #444;
+            color: white;
+            border: none;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>نمودار تکنیکال ارز دیجیتال</h1>
+        <div id="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="controls">
+            <select id="timeframe">
+                <option value="1d">1 روز</option>
+                <option value="1w">1 هفته</option>
+                <option value="1m">1 ماه</option>
+                <option value="1y">1 سال</option>
+            </select>
+            <button onclick="updateChart()">به روز رسانی</button>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        let myChart;
+
+        // Sample data (replace with your actual data source)
+        const data = {
+            labels: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور'],
+            datasets: [{
+                label: 'قیمت (دلار)',
+                data: [65, 59, 80, 81, 56, 55],
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        };
+
+        function createChart() {
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart() {
+            const timeframe = document.getElementById('timeframe').value;
+            // Fetch new data based on timeframe (replace with your actual data fetching)
+            const newData = {
+                labels: ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'],
+                datasets: [{
+                    label: 'قیمت (دلار)',
+                    data: [70, 60, 90, 75, 65, 70],
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            };
+
+            myChart.data = newData;
+            myChart.update();
+        }
+
+        function randomizeData() {
+            myChart.data.datasets[0].data = myChart.data.datasets[0].data.map(value => {
+                return value + (Math.random() - 0.5) * 5; // تغییرات کمتر
+            });
+            myChart.update();
+        }
+
+        createChart();
+        setInterval(randomizeData, 5000); // Update data every 5 seconds
+    </script>
+</body>
+</html>
