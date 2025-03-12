@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کیف پول</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #282828;
+            border-bottom: 2px solid #444;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .balance {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background: #45a049;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background: #343434;
+            padding: 20px;
+            border-radius: 5px;
+            width: 320px;
+            text-align: center;
+        }
+        .close {
+            background: red;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        input[type="number"],
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background: #444;
+            color: white;
+        }
+        input[type="number"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            background: #555;
+        }
+        
+    </style>
+    <style type="text/css">
+        .header-wrap {background: #fffbcc; color: #000}
+        .header-wrap a {color: #000}
+        .cate .item {
+            padding: 15px;
+            width: 25%;
+            line-height: 25px;
+        }
+        .cate .arrow {height: 40px;}
+        .cate .down-arrow {-webkit-transform: rotate(180deg);    transform: rotate(180deg);}
+        .cate .icon {
+            width: 30px;
+            margin: 0 auto;
+        }
+        .cate .item .t2 {color: #b0b0b0;}
+        .list-coin {
+            padding: 10px;
+            border-top: 3px solid #00ffd9;
+        }
+        
+        .list-coin .hd {
+            padding: 10px;
+            color: #7f7f7f
+        }
+       
+        font{
+            color: #ffffff;
+        }
+        .list-coin .item {
+            border-bottom: 1px solid #3bf9a0;
+            padding: 15px;
+        }
+        .list-coin .item .t2 {color: #b0b0b0;}
+        .list-coin .item:LAST-CHILD {
+            border-bottom: 0px;
+        }
+        
+        .list-coin .item .persent {
+            padding: 6px;
+            color: #ffffff;
+            border-radius: 4px;
+            background: #00c483;
+            text-align: center;
+        }
+        .list-coin .item .persent-red {background: #db5656!important}
+        .footbar {position: fixed; z-index: 999; bottom: 0; left: 0; right: 0;}
+        .footbar .btn {border-radius: 30px;  width: 40%; margin:10px;}
+        .footbar a {display: block;}
+        .footbar .btnreg a {color: #ffffff}
+        </style>
+        <script type="text/javascript">
+            function getMarket() {
+                $.ajax({
+                    type: 'post',
+                    url: "/index/okx/market/type/1.html",
+                    dataType: "json",
+                    data: $("form").serialize(),
+                    success: function(res) {
+                        $(".market1").html(res.result);
+                    }
+                });
+            }
+            function getMarket2() {
+                $.ajax({
+                    type: 'post',
+                    url: "/index/okx/market/type/2.html",
+                    dataType: "json",
+                    data: $("form").serialize(),
+                    success: function(res) {
+                        $(".market2").html(res.result);
+                    }
+                });
+            }
+            $(document).ready(function() {
+                getMarket();
+                var timerId = setInterval(getMarket, 30000); 
+                
+                getMarket2();
+                var timerId2 = setInterval(getMarket2, 30000); 
+            })
+        </script>
+</head>
+<body>
+    <header>
+        <h1>کیف پول</h1>
+    </header>
+    <div class="container">
+        <h2>جزئیات کیف پول</h2>
+        <div class="balance">موجودی: 10 دلار</div>
+        
+        <button class="button" onclick="openDepositPopup()">واریز</button>
+        <button class="button" onclick="openWithdrawPopup()">برداشت</button>
+        
+        <div id="message" style="color: red; text-align: center;"></div>
+    </div>
+
+    <!-- پاپ آپ واریز -->
+    <div class="popup" id="depositPopup">
+        <div class="popup-content">
+            <h3>واریز مبلغ</h3>
+            <p>آدرس کیف پول: <span id="walletAddress">آدرس_کیف_پول_شما</span></p>
+            <input type="number" id="depositAmount" placeholder="مبلغ واریز (دلار)" required>
+            <button onclick="deposit()" class="button">تأیید واریز</button>
+            <button class="close" onclick="closeDepositPopup()">بستن</button>
+        </div>
+    </div>
+
+    <!-- پاپ آپ برداشت -->
+    <div class="popup" id="withdrawPopup">
+        <div class="popup-content">
+            <h3>برداشت مبلغ</h3>
+            <input type="number" id="withdrawAmount" placeholder="مبلغ برداشت (دلار)" required>
+            <input type="text" id="withdrawAddress" placeholder="آدرس کیف پول" required>
+            <button onclick="withdraw()" class="button">تأیید برداشت</button>
+            <button class="close" onclick="closeWithdrawPopup()">بستن</button>
+        </div>
+    </div>
+
+    <script>
+        const balanceElement = document.querySelector('.balance');
+        let balance = 10;
+
+        function openDepositPopup() {
+            document.getElementById('depositPopup').style.display = 'flex';
+            document.getElementById('message').textContent = '';
+        }
+
+        function closeDepositPopup() {
+            document.getElementById('depositPopup').style.display = 'none';
+            document.getElementById('depositAmount').value = '';
+        }
+
+        function openWithdrawPopup() {
+            document.getElementById('withdrawPopup').style.display = 'flex';
+            document.getElementById('message').textContent = '';
+        }
+
+        function closeWithdrawPopup() {
+            document.getElementById('withdrawPopup').style.display = 'none';
+            document.getElementById('withdrawAmount').value = '';
+            document.getElementById('withdrawAddress').value = '';
+        }
+
+        function deposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            if (amount > 0) {
+                balance += amount;
+                balanceElement.textContent = `موجودی: ${balance.toFixed(2)} دلار`;
+                closeDepositPopup();
+            } else {
+                document.getElementById('message').textContent = 'مبلغ نامعتبر است.';
+            }
+        }
+
+        function withdraw() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const address = document.getElementById('withdrawAddress').value;
+            if (amount > 0 && amount <= balance && address !== '') {
+                balance -= amount;
+                balanceElement.textContent = `موجودی: ${balance.toFixed(2)} دلار`;
+                closeWithdrawPopup();
+            } else {
+                document.getElementById('message').textContent = 'مبلغ یا آدرس نامعتبر است.';
+            }
+        }
+    </script>
+
+
+
+
+
+
+<div class="list-coin">
+    <div class="hd flex">
+        <div class="flex-block"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ارز</font></font></div>
+        <div class="flex-block tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">آخرین قیمت</font></font></div>
+        <!-- <div class="flex-block">Leaderboard</div> -->
+    </div>
+    <div class="bd market1">						<div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/BTC-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">بیت کوین / </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">78831</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/ETH-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ETH/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">1862.37</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/DOGE-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">DOGE/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">0.15696</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/EOS-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">EOS/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">0.4651</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/LTC-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">LTC/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">88.59</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/BCH-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">BCH/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">342.3</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/XRP-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">XRP/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2.067</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/ETC-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ETC/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">17.03</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/BSV-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">BSV/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">31.37</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/ADA-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ADA/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">0.6858</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/FIL-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">FIL/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2.66</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/TRX-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TRX/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">0.22955</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/UNI-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">UNI/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">5.946</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/LINK-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">پیوند / </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">12.719</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/SOL-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SOL/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">118.96</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+                    <div class="item flex align-center">
+            <div class="flex-block">
+                <img src="https://xmsqw.com/image/AAVE-USDT.png" class="icon" style="width: 28px">
+                <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">AAVE/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+            </div>
+            <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">179.82</font></font></div>
+            <!-- 
+            <div class="flex-block">
+                <div class="persent persent-red">0%</div>				</div>
+            -->
+        </div>
+        </div>
+</div>
+    <div class="footbar">
+    <div class="flex flex-center">	       
+       <div class="btn btnblue btnreg"><a href="https://xmsqw.com/index/passport/signup.html">
+        <font style="vertical-align: inherit;">
+            <font style="vertical-align: inherit;">ثبت نام کنید</font>
+        </font></a>
+    </div>
+       <div class="btn btngrey btnlogin"><a href="https://xmsqw.com/index/passport/login.html">
+        <font style="vertical-align: inherit;">
+            <font style="vertical-align: inherit;">وارد شوید</font>
+        </font></a></div>
+    </div>
+</div>
+<div id="goog-gt-tt" class="VIpgJd-yAWNEb-L7lbkb skiptranslate" style="border-radius: 12px; margin: 0 0 0 -23px; padding: 0; font-family: 'Google Sans', Arial, sans-serif;" data-id="">
+    <div id="goog-gt-vt" class="VIpgJd-yAWNEb-hvhgNd">
+        <div class=" VIpgJd-yAWNEb-hvhgNd-l4eHX-i3jM8c">
+            <img src="https://fonts.gstatic.com/s/i/productlogos/translate/v14/24px.svg" width="24" height="24" alt=""></div>
+            <div class=" VIpgJd-yAWNEb-hvhgNd-k77Iif-i3jM8c">
+                <div class="VIpgJd-yAWNEb-hvhgNd-IuizWc" dir="ltr">Original text</div>
+                <div id="goog-gt-original-text" class="VIpgJd-yAWNEb-nVMfcd-fmcmS VIpgJd-yAWNEb-hvhgNd-axAV1">
+
+                </div></div><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid ltr">
+                    <div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid-B7I4Od ltr" dir="ltr">
+                        <div class="VIpgJd-yAWNEb-hvhgNd-UTujCb">Rate this translation</div>
+                        <div class="VIpgJd-yAWNEb-hvhgNd-eO9mKe">Your feedback will be used to help improve Google Translate</div></div><div class="VIpgJd-yAWNEb-hvhgNd-xgov5 ltr">
+                            <button id="goog-gt-thumbUpButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Good translation" aria-label="Good translation" aria-pressed="false">
+                                <span id="goog-gt-thumbUpIcon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7H2v13h16c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM7 18H4V9h3v9zm14-7l-3 7H9V8l4.34-4.34L12 9h9v2z">
+
+                                    </path></svg></span><span id="goog-gt-thumbUpIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7v13h11c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM5 7H1v13h4V7z"></path></svg>
+                                    
+                                    </span></button><button id="goog-gt-thumbDownButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Poor translation" aria-label="Poor translation" aria-pressed="false"><span id="goog-gt-thumbDownIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7h5V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zM17 6h3v9h-3V6zM3 13l3-7h9v10l-4.34 4.34L12 15H3v-2z">
+
+                                    </path>
+                                    </svg>
+                                    </span>
+                                   
+                                       
+
+
+
+
+</body>
+</html>
+
+
+
+

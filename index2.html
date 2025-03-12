@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شرکت سرمایه گذاری</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .button {
+            background: #5cb85c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            display: inline-block;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 20px 0;
+            text-decoration: none;
+        }
+        .swiper-container {
+            width: 100%;
+            height: 400px; /* تغییر ارتفاع اسلایدر */
+            margin-bottom: 20px;
+        }
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #282828;
+            border-bottom: 2px solid #444;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .balance {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background: #45a049;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background: #343434;
+            padding: 20px;
+            border-radius: 5px;
+            width: 320px;
+            text-align: center;
+        }
+        .close {
+            background: red;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        input[type="number"],
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background: #444;
+            color: white;
+        }
+        input[type="number"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            background: #555;
+        }
+        .header-wrap {background: #fffbcc; color: #000}
+        .header-wrap a {color: #000}
+        .cate .item {
+            padding: 15px;
+            width: 25%;
+            line-height: 25px;
+        }
+        .cate .arrow {height: 40px;}
+        .cate .down-arrow {-webkit-transform: rotate(180deg);    transform: rotate(180deg);}
+        .cate .icon {
+            width: 30px;
+            margin: 0 auto;
+        }
+        .cate .item .t2 {color: #b0b0b0;}
+        .list-coin {
+            padding: 10px;
+            border-top: 3px solid #00ffd9;
+        }
+        .list-coin .hd {
+            padding: 10px;
+            color: #7f7f7f
+        }
+        font{
+            color: #ffffff;
+        }
+        .list-coin .item {
+            border-bottom: 1px solid #3bf9a0;
+            padding: 15px;
+        }
+        .list-coin .item .t2 {color: #b0b0b0;}
+        .list-coin .item:LAST-CHILD {
+            border-bottom: 0px;
+        }
+        .list-coin .item .persent {
+            padding: 6px;
+            color: #ffffff;
+            border-radius: 4px;
+            background: #00c483;
+            text-align: center;
+        }
+        .list-coin .item .persent-red {background: #db5656!important}
+        .footbar {position: fixed; z-index: 999; bottom: 0; left: 0; right: 0;}
+        .footbar .btn {border-radius: 30px;  width: 40%; margin:10px;}
+        .footbar a {display: block;}
+        .footbar .btnreg a {color: #ffffff}
+    </style>
+</head>
+<body>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="1.webp" alt="Slide 1"></div>
+
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+    <header>
+        <h1>خوش آمدید به شرکت سرمایه گذاری</h1>
+    </header>
+    <div class="container">
+        <h2>پنل کاربری</h2>
+        <p>برای وارد شدن به کیف پول خود، دکمه زیر را بزنید:</p>
+        <a href="#" class="button" onclick="openWallet()">ورود به کیف پول</a>
+    </div>
+
+    <div class="list-coin">
+        <div class="hd flex">
+            <div class="flex-block"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ارز</font></font></div>
+            <div class="flex-block tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">آخرین قیمت</font></font></div>
+        </div>
+        <div class="bd market1">
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/BTC-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">بیت کوین / </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">78831</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/ETH-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ETH/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">1862.37</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/DOGE-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">DOGE/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">0.15696</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/EOS-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">EOS/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">0.4651</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/LTC-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">LTC/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">88.59</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/BCH-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">BCH/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">342.3</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/XRP-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">XRP/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2.067</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/ETC-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ETC/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">17.03</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/BSV-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">BSV/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">31.37</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/ADA-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ADA/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">0.6858</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/FIL-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">FIL/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2.66</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/TRX-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TRX/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">0.22955</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/UNI-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">UNI/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">5.946</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/LINK-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">پیوند / </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">12.719</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/SOL-USDT.png" class="
+                    icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SOL/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">118.96</font></font></div>
+            </div>
+            <div class="item flex align-center">
+                <div class="flex-block">
+                    <img src="https://xmsqw.com/image/AAVE-USDT.png" class="icon" style="width: 28px">
+                    <span class="t1 text-weight-bold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">AAVE/ </font></font></span><span class="t2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">USDT</font></font></span>
+                </div>
+                <div class="flex-block text-weight-bold tr"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">179.82</font></font></div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function openWallet() {
+            const password = prompt("لطفاً رمز عبور خود را وارد کنید:");
+            if (password === "mhmd") { // اینجا رمز عبور واقعی را قرار دهید
+                window.location.href = "wallet.html"; // به صفحه کیف پول هدایت می‌شود
+            } else {
+                alert("رمز عبور نادرست است.");
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            spaceBetween: 30,
+            centeredSlides: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    </script>
+</body>
+</html>
